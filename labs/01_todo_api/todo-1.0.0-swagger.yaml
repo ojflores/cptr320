@@ -1,0 +1,252 @@
+openapi: 3.0.0
+
+info:
+  description: |
+    This is a todo list assignment for CPTR 320
+  version: "1.0.0"
+  title: Oscarś ToDO List
+  contact:
+    email: oscar.flores@wallawalla.edu
+  host: floros-cptr320.cs.wallawalla.edu
+tags:
+  - name: tasks
+    description: tasks that need to be done
+  - name: lists
+    description: lists of items needed to be completed
+paths:
+  '/tasks':
+    get:
+      tags:
+        - tasks
+      summary: gets a list of all the the tasks
+      operationId: getAllTasks
+      description: returns a list of tasks
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+              type: object
+    post:
+      tags:
+        - tasks
+      summary: add another task to the db
+      operationId: addTask
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+  '/tasks/{taskID}'
+    get:
+      tags:
+        - tasks
+      summary: find a task by the id
+      operationId: getTask
+      description: returns a single task
+      parameters:
+        - name: task_id
+          in: path
+          description: id of the task to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tasks'
+    put:
+      tags:
+        - tasks
+      summary: updates a task in the db
+      operationId: updateTask
+      parameters:
+        - name: task_id
+          in: path
+          description: Id of the task to update
+          requried: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tasks'
+      requestBody:
+        $ref: '#/components/requestBodies/tasks'
+    delete:
+      tags:
+        - tasks
+      summary: deletes a task
+      operationID: deleteTask
+      parameters:
+        - name: task_id
+          in: path
+          description: ID of the task to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+  '/lists':
+    get:
+      tags:
+        - lists
+      summary: gives you the list of lists in db
+      description: returns a list of lists
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+    post:
+      tags:
+        - lists
+      summary: add new list to the db
+      operationID: addList
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+      requestBody:
+        $ref: '#/components/requestBodies/lists'
+  'lists/{list_id}':
+    get:
+      tags:
+        - lists
+      summary: find a list by their id
+      description: returns a single list
+      parameters:
+        - name: list_id
+          in: path
+          description: ID of list to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: list_name
+          in: path
+          description: name of the list to return
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/lists'
+    put:
+      tags:
+        - lists
+      summary: Updates a list in the db
+      operationId: updateList
+      parameters:
+        - name: list_id
+          in: path
+          description: ID of list to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/lists'
+      requestBody:
+        $ref: '#/components/requestBodies/lists'
+    delete:
+      tags:
+        - lists
+      summary: Deletes a list
+      operationId: deleteList
+      parameters:
+        - name: list_id
+          in: path
+          description: ID of list to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+components:
+  schemas:
+    tasks:
+      type: object
+      properties:
+          task_id:
+            type: integer
+            format: int64
+          list_id:
+            type: integer
+            format: int64
+          task_text:
+            type: string
+          task_assigned:
+            type: string
+          task_arg1:
+            type: string
+          task_arg2:
+            type: string
+          task_state:
+            type: string
+    lists:
+      type: object
+      properties:
+          list_id:
+            type: integer
+            format: int64
+          list_name:
+            type: string
+          list_desc:
+            type: string
+          list_due:
+            type: datetime
+            format: year-month-day hour:minute:second
+          list_owner:
+            type: string
+          task_arg1:
+            type: string
+          task_arg2:
+            type: string
+          list_state:
+            type: string
+  requestBodies:
+    tasks:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/lists'
+            
+      description: task object that needs to be added to the db
+      required: true
+    lists:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/lists'
+      description: list object that needs to be added to the db
+      required: true 

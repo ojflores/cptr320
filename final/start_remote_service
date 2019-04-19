@@ -1,0 +1,5 @@
+#!/bin/bash
+
+vm="awsmicro"
+ssh ${vm} 'cd new/final-cptr320-project; git pull'
+ssh ${vm} './new/final-cptr320-project/start_intramurals_api'

@@ -1,0 +1,393 @@
+openapi: 3.0.0
+# Added by API Auto Mocking Plugin
+servers:
+  - url: http://cptr320.cs.wallawalla.edu:8000/api/v1
+    description: WWU Class Server
+info:
+  description: |
+    Review the details of the assignment in your lab 3 README.md file.
+  version: "2.0.0"
+  title: Lab 3 - TODO
+tags:
+  - name: task
+  - name: list
+  - name: user
+paths:
+  /tasks:
+    post:
+      tags:
+        - task
+      summary: Add a new task
+      responses:
+        '405':
+          description: Invalid input
+      requestBody:
+        $ref: '#/components/requestBodies/Task'
+    get:
+      tags:
+        - task
+      summary: Finds tasks
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
+  /tasks/{task_id}:
+    get:
+      tags:
+        - task
+      summary: Finds task by id
+      parameters:
+        - name: task_id
+          in: path
+          description: ID of task to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
+        '400':
+          description: Invalid ID value
+        '404':
+          description: Task not found
+    put:
+      tags:
+        - task
+      summary: Updates a list
+      parameters:
+        - name: task_id
+          in: path
+          description: ID of list that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '405':
+          description: Invalid input
+      requestBody:
+        $ref: '#/components/requestBodies/Task'
+    delete:
+      tags:
+        - task
+      summary: Deletes a list
+      parameters:
+        - name: task_id
+          in: path
+          description: Task id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: List not found
+  /lists:
+    post:
+      tags:
+        - list
+      summary: Add a new list
+      responses:
+        '405':
+          description: Invalid input
+      requestBody:
+        $ref: '#/components/requestBodies/List'
+    get:
+      tags:
+        - list
+      summary: Finds lists
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/List'
+  /lists/{list_id}:
+    get:
+      tags:
+        - list
+      summary: Find list by ID
+      parameters:
+        - name: list_id
+          in: path
+          description: ID of list to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/List'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: List not found
+    post:
+      tags:
+        - list
+      summary: Updates a list with form data
+      parameters:
+        - name: list_id
+          in: path
+          description: ID of list that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '405':
+          description: Invalid input
+      requestBody:
+        $ref: '#/components/requestBodies/List'
+    delete:
+      tags:
+        - list
+      summary: Deletes a list
+      parameters:
+        - name: list_id
+          in: path
+          description: List id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: List not found
+  /lists/{list_id}/tasks:
+    get:
+      tags:
+        - list
+      summary: Finds tasks for specific list
+      parameters:
+        - name: list_id
+          in: path
+          description: List id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
+  /user:
+    post:
+      tags:
+        - user
+      summary: Create user
+      description: This can only be done by the logged in user.
+      operationId: createUser
+      responses:
+        default:
+          description: successful operation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        description: Created user object
+        required: true
+    get:
+      tags:
+        - user
+      summary: Finds users
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+  '/users/{username}':
+    get:
+      tags:
+        - user
+      summary: Get user by user name
+      operationId: getUserByName
+      parameters:
+        - name: username
+          in: path
+          description: The name that needs to be fetched. Use user1 for testing.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid username supplied
+        '404':
+          description: User not found
+    put:
+      tags:
+        - user
+      summary: Updated user
+      description: This can only be done by the logged in user.
+      operationId: updateUser
+      parameters:
+        - name: username
+          in: path
+          description: name that need to be updated
+          required: true
+          schema:
+            type: string
+      responses:
+        '400':
+          description: Invalid user supplied
+        '404':
+          description: User not found
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        description: Updated user object
+        required: true
+    delete:
+      tags:
+        - user
+      summary: Delete user
+      description: This can only be done by the logged in user.
+      operationId: deleteUser
+      parameters:
+        - name: username
+          in: path
+          description: The name that needs to be deleted
+          required: true
+          schema:
+            type: string
+      responses:
+        '400':
+          description: Invalid username supplied
+        '404':
+          description: User not found
+components:
+  schemas:
+    Task:
+      type: object
+      properties:
+        task_id:
+          type: integer
+          format: int64
+        list_id:
+          type: integer
+          format: int64
+        task_text:
+          type: string
+        task_assigned:
+          type: string
+        task_arg1:
+          type: string
+        task_arg2:
+          type: string
+        task_state:
+          type: string
+          description: Task Status
+          enum:
+            - C
+            - I
+    List:
+      type: object
+      properties:
+        list_id:
+          type: integer
+          format: int64
+        list_name:
+          type: string
+        list_desc:
+          type: string
+        list_due:
+          type: string
+        list_owner:
+          type: string
+        list_arg1:
+          type: string
+        list_arg2:
+          type: string
+        list_state:
+          type: string
+          description: List Status
+          enum:
+            - A
+            - I
+    User:
+      type: object
+      properties:
+        user_uname:
+          type: string
+        user_pword:
+          type: string
+        user_fname:
+          type: string
+        user_lname:
+          type: string
+        user_email:
+          type: string
+        user_arg1:
+          type: string
+        user_arg2:
+          type: string
+        user_admin:
+          type: number
+        user_session:
+          type: string
+  requestBodies:
+    Task:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Task'
+      description: Task object that needs to be added
+      required: true
+    List:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/List'
+      description: List object that needs to be added
+      required: true
+    User:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/User'
+      description: User object that needs to be added
+      required: true

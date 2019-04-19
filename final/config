@@ -1,0 +1,5 @@
+Host awsmicro
+	HostName ec2-3-208-194-127.compute-1.amazonaws.com
+	User ubuntu
+	IdentityFile ~/Desktop/final/final-cptr320-project/key_pair.pem
+
